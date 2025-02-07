@@ -7,6 +7,7 @@ import Wellness from "./navigation_pages/wellness";
 import Settings from "./navigation_pages/profile_pages/settings";
 import Notifications from "./navigation_pages/profile_pages/notifications";
 import WellnessReport from "./navigation_pages/profile_pages/wellness_report";
+import WellnessCheck from "./navigation_pages/wellness_pages/wellness_check";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -39,6 +40,23 @@ const ProfileStack = () => {
   );
 };
 
+const WellnessStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen 
+        name="WellnessMain" 
+        component={Wellness} 
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen 
+        name="WellnessCheck" 
+        component={WellnessCheck} 
+        options={{ title: "Wellness Check" }} 
+      />
+    </Stack.Navigator>
+  );
+}
+
 
 
 // Bottom Tab Navigator for main navigation
@@ -46,7 +64,7 @@ const Navbar = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen name="Goals" component={Goals} />
-      <Tab.Screen name="Wellness" component={Wellness} />
+      <Tab.Screen name="Wellness" component={WellnessStack} />
       <Tab.Screen name="Profile" component={ProfileStack} />
     </Tab.Navigator>
   );
