@@ -143,7 +143,7 @@ const Goals = () => {
                     <TouchableOpacity onPress={() => setCollapsedUrgent(!collapsedUrgent)} style={styles.sectionHeader}>
                         <Text style={styles.sectionHeaderText}>Urgent</Text>
                         <MaterialIcons 
-                            name={collapsedUrgent ? 'arrow-right' : 'arrow-drop-down'}  // Use Material Icon
+                            name={collapsedUrgent ? 'arrow-right' : 'arrow-drop-down'} 
                             size={24} 
                             color="black" 
                         />
