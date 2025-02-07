@@ -1,67 +1,55 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { Feather } from "@expo/vector-icons";
-
-import Profile from "./navigation_pages/profile";
 import Goals from "./navigation_pages/goals";
+import Profile from "./navigation_pages/profile";
 import Wellness from "./navigation_pages/wellness";
+import Settings from "./navigation_pages/profile_pages/settings";
+import Notifications from "./navigation_pages/profile_pages/notifications";
+import WellnessReport from "./navigation_pages/profile_pages/wellness_report";
 
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
-const BottomTab = createBottomTabNavigator();
-
-export const Navbar = () => {
+// Profile Stack Navigator for profile-related pages
+const ProfileStack = () => {
   return (
-    <BottomTab.Navigator
-      initialRouteName="Goals"
-      screenOptions={{
-        tabBarStyle: { position: "absolute", backgroundColor: "#136D79" },
-       
-        tabBarActiveTintColor: "#AAE3BC",
-        tabBarInactiveTintColor: "#F5F9F9",
-      }}
-    >
-      <BottomTab.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Feather name={"user"} size={size} color={color} />
-          ),
-        }}
+    <Stack.Navigator>
+      <Stack.Screen 
+        name="ProfileMain" 
+        component={Profile} 
+        options={{ headerShown: false }} // Hide header only for Profile
       />
-      <BottomTab.Screen
-        name="Goals"
-        component={Goals}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Feather name={"book"} size={size} color={color} />
-          ),
-        }}
+      <Stack.Screen 
+        name="Settings" 
+        component={Settings} 
+        options={{ title: "Settings" }} // Back button will appear
       />
-      <BottomTab.Screen
-        name="Wellness"
-        component={Wellness}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Feather name={"heart"} size={size} color={color} />
-          ),
-        }}
+      <Stack.Screen 
+        name="Notifications" 
+        component={Notifications} 
+        options={{ title: "Notifications" }} 
       />
-    </BottomTab.Navigator>
+      <Stack.Screen 
+        name="WellnessReport" 
+        component={WellnessReport} 
+        options={{ title: "Wellness Report" }} 
+      />
+    </Stack.Navigator>
   );
 };
 
-const styles = StyleSheet.create({
-  layout: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    color: "green",
-  },
-});
+
+
+// Bottom Tab Navigator for main navigation
+const Navbar = () => {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen name="Goals" component={Goals} />
+      <Tab.Screen name="Wellness" component={Wellness} />
+      <Tab.Screen name="Profile" component={ProfileStack} />
+    </Tab.Navigator>
+  );
+};
 
 export default Navbar;
