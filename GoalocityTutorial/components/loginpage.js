@@ -62,7 +62,7 @@ const Login = () => {
             placeholderTextColor="#444444"
             value={email}
             onChangeText={setEmail}
-          />
+          />   
         </View>
         <View style={styles.inputContainer}>
           <TextInput
