@@ -12,39 +12,30 @@ const Login = () => {
   const handleLogin = async () => {
     setErrorMessage('');
     if (!email || !password) {
-      setErrorMessage('Please enter both email and password');
-      return;
-    }
-    try {
-      // Check if the email exists in the users database
-      const { data: user, error } = await supabase
-        .from('Users')
-        .select('*')
-        .eq('email', email)
-        .single();
-
-      if (!user || user.password !== password) {
-        setErrorMessage('Username/password incorrect');
+        setErrorMessage('Please enter both email and password');
         return;
-      }
+    }
 
-      try {
-        let { data, error } = await supabase.auth.signInWithPassword({
-          email: email,
-          password: password,
+    try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password,
         });
 
-        if (data) {
-          console.log("Login Successful");
-          navigation.navigate("Navbar Home");
+        if (error) {
+            setErrorMessage('Username/password incorrect');
+            return;
         }
-      } catch (error) {
-        console.error('Error:', error.message);
-      }
+
+        console.log("Login Successful:");
+        navigation.navigate("Navbar Home");
+
     } catch (error) {
-      console.error('Error:', error.message);
-    }
+        console.error('Error:', error.message);
+        setErrorMessage('An error occurred. Please try again.');
+      }
   };
+
 
   return (
     <KeyboardAvoidingView
