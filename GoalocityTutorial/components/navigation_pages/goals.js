@@ -50,6 +50,128 @@ const Goals = () => {
         fetchGoals();
     }, []);
 
+    return (
+        <KeyboardAvoidingView
+            style={styles.container}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        >
+            <Text style={styles.header}>Goals</Text>
+
+            {loading ? (
+                <ActivityIndicator size="large" color="#0000ff" />
+            ) : (
+                <ScrollView style={styles.scrollContainer}>
+                    {/* Urgent Goals Section */}
+                    <TouchableOpacity onPress={() => setCollapsedUrgent(!collapsedUrgent)} style={styles.sectionHeader}>
+                        <Text style={styles.sectionHeaderText}>Urgent</Text>
+                        <MaterialIcons 
+                            name={collapsedUrgent ? 'arrow-right' : 'arrow-drop-down'} 
+                            size={24} 
+                            color="black" 
+                        />
+                    </TouchableOpacity>
+                    {!collapsedUrgent && (
+                        <View style={styles.goalsContainer}>
+                            {goals?.filter(goal => goal.urgent).map((goal) => (
+                                <View key={goal.id} style={styles.goalBox}>
+                                    <TouchableOpacity onPress={() => toggleGoalCompletion(goal.id)} style={styles.checkboxContainer}>
+                                        <Image
+                                            source={goal.completed ? require('../../assets/checkbox_checked.png') : require('../../assets/checkbox_unchecked.png')}
+                                            style={styles.checkbox}
+                                        />
+                                    </TouchableOpacity>
+                                    <View style={styles.goalTextContainer}>
+                                        <Text style={styles.goalText}>{goal.name}</Text>
+                                        <Text style={styles.goalDate}>Due: {goal.due_date}</Text>
+                                    </View>
+                                </View>
+                            ))}
+                        </View>
+                    )}
+
+                    {/* Other Goals Section */}
+                    <TouchableOpacity onPress={() => setCollapsedOther(!collapsedOther)} style={styles.sectionHeader}>
+                        <Text style={styles.sectionHeaderText}>Other</Text>
+                        <MaterialIcons 
+                            name={collapsedOther ? 'arrow-right' : 'arrow-drop-down'}  // Use Material Icon
+                            size={24} 
+                            color="black" 
+                        />
+                    </TouchableOpacity>
+                    {!collapsedOther && (
+                        <View style={styles.goalsContainer}>
+                            {goals?.filter(goal => !goal.urgent).map((goal) => (
+                                <View key={goal.id} style={styles.goalBox}>
+                                    <TouchableOpacity onPress={() => toggleGoalCompletion(goal.id)} style={styles.checkboxContainer}>
+                                        <Image
+                                            source={goal.completed ? require('../../assets/checkbox_checked.png') : require('../../assets/checkbox_unchecked.png')}
+                                            style={styles.checkbox}
+                                        />
+                                    </TouchableOpacity>
+                                    <View style={styles.goalTextContainer}>
+                                        <Text style={styles.goalText}>{goal.name}</Text>
+                                        <Text style={styles.goalDate}>Due: {goal.due_date}</Text>
+                                    </View>
+                                </View>
+                            ))}
+                        </View>
+                    )}
+                </ScrollView>
+            )}
+
+            {/* Add Goal Button */}
+            <TouchableOpacity 
+                style={styles.addButton} 
+                onPress={() => setShowModal(true)}
+            >
+                <MaterialIcons name="add" size={40} color="white" />
+            </TouchableOpacity>
+
+            {/* Modal for Adding New Goal */}
+            <Modal
+                visible={showModal}
+                animationType="slide"
+                transparent={true}
+                onRequestClose={() => setShowModal(false)}
+            >
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.modalTitle}>Add New Goal</Text>
+
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Goal Name"
+                                value={newGoalName}
+                                onChangeText={setNewGoalName}
+                            />
+
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Due Date (YYYY-MM-DD)"
+                                value={newGoalDueDate}
+                                onChangeText={setNewGoalDueDate}
+                            />
+
+                            <View style={styles.checkboxContainer}>
+                                <Text style={styles.checkboxLabel}>Urgent</Text>
+                                <TouchableOpacity onPress={() => setNewGoalUrgent(!newGoalUrgent)}>
+                                    <Image
+                                        source={newGoalUrgent ? require('../../assets/checkbox_checked.png') : require('../../assets/checkbox_unchecked.png')}
+                                        style={styles.checkbox}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+
+                            <Button title="Add Goal" onPress={handleAddGoal} />
+                            <Button title="Cancel" onPress={() => setShowModal(false)} />
+                        </View>
+                    </View>
+                </TouchableWithoutFeedback>
+            </Modal>
+        </KeyboardAvoidingView>
+    );
+
 };
 
 
