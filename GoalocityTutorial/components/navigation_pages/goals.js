@@ -1,5 +1,10 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, Image, TextInput, Modal, Button, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView } from 'react-native';
+import { supabase } from '../../lib/initSupabase';
+import { MaterialIcons } from '@expo/vector-icons';  // Import Material Icons
+
+//import React from 'react';
+//import { View, Text, StyleSheet } from 'react-native';
 
 const Goals = () => {
     return (
