@@ -50,6 +50,85 @@ const Goals = () => {
         fetchGoals();
     }, []);
 
+    const toggleGoalCompletion = async (goalId) => {
+        const updatedGoal = goals.find(goal => goal.id === goalId);
+
+        if (!updatedGoal) {
+            console.error("Goal not found!");
+            return;
+        }
+
+        console.log("Goal to update:", updatedGoal);
+
+        const { error } = await supabase
+            .from('Goals')
+            .update({ completed: !updatedGoal.completed })
+            .eq('id', goalId);
+
+        if (error) {
+            console.error("Error updating goal completion:", error.message);
+        } else {
+            setGoals(prevGoals => prevGoals.map(goal => 
+                goal.id === goalId ? { ...goal, completed: !goal.completed } : goal
+            ));
+        }
+    };
+
+    const handleAddGoal = async () => {
+        const { data: { user }, error: authError } = await supabase.auth.getUser();
+    
+        if (authError || !user) {
+            console.error("Error fetching user:", authError?.message);
+            return;
+        }
+    
+        const userEmail = user.email;
+    
+        // Ensure goal data is valid before inserting
+        if (!newGoalName || !newGoalDueDate) {
+            console.error("Goal name or due date is missing!");
+            return;
+        }
+    
+        // Check if due_date is a valid date
+        const parsedDueDate = new Date(newGoalDueDate);
+        if (isNaN(parsedDueDate.getTime())) {
+            console.error("Invalid due date format!");
+            return;
+        }
+    
+        const { data, error, status } = await supabase
+            .from('Goals')
+            .insert([
+                {
+                    name: newGoalName,
+                    due_date: parsedDueDate.toISOString(),  // Ensure proper ISO format
+                    urgent: newGoalUrgent,
+                    email: userEmail,
+                }
+            ])
+            .select();  // This will explicitly request the inserted row to be returned
+    
+        // Log both data and error to get more context
+        console.log("Insert response:", { data, error, status });
+    
+        if (error) {
+            console.error("Error inserting new goal:", error.message);
+        } else {
+            console.log("Inserted goal data:", data);
+            setGoals(prevGoals => [...prevGoals, ...data]);
+            setShowModal(false);
+            setNewGoalName('');
+            setNewGoalDueDate('');
+            setNewGoalUrgent(false);
+        }
+    
+        // Log to make sure data is being passed
+        console.log(newGoalName);
+        console.log(newGoalDueDate);
+        console.log(newGoalUrgent);
+    };
+
     return (
         <KeyboardAvoidingView
             style={styles.container}
@@ -76,7 +155,7 @@ const Goals = () => {
                                 <View key={goal.id} style={styles.goalBox}>
                                     <TouchableOpacity onPress={() => toggleGoalCompletion(goal.id)} style={styles.checkboxContainer}>
                                         <Image
-                                            source={goal.completed ? require('../../assets/checkbox_checked.png') : require('../../assets/checkbox_unchecked.png')}
+                                            source={goal.completed ? require('../../assets/checkbox-checked.png') : require('../../assets/checkbox-unchecked.png')}
                                             style={styles.checkbox}
                                         />
                                     </TouchableOpacity>
@@ -104,7 +183,7 @@ const Goals = () => {
                                 <View key={goal.id} style={styles.goalBox}>
                                     <TouchableOpacity onPress={() => toggleGoalCompletion(goal.id)} style={styles.checkboxContainer}>
                                         <Image
-                                            source={goal.completed ? require('../../assets/checkbox_checked.png') : require('../../assets/checkbox_unchecked.png')}
+                                            source={goal.completed ? require('../../assets/checkbox-checked.png') : require('../../assets/checkbox-unchecked.png')}
                                             style={styles.checkbox}
                                         />
                                     </TouchableOpacity>
@@ -157,7 +236,7 @@ const Goals = () => {
                                 <Text style={styles.checkboxLabel}>Urgent</Text>
                                 <TouchableOpacity onPress={() => setNewGoalUrgent(!newGoalUrgent)}>
                                     <Image
-                                        source={newGoalUrgent ? require('../../assets/checkbox_checked.png') : require('../../assets/checkbox_unchecked.png')}
+                                        source={newGoalUrgent ? require('../../assets/checkbox-checked.png') : require('../../assets/checkbox-unchecked.png')}
                                         style={styles.checkbox}
                                     />
                                 </TouchableOpacity>
@@ -179,12 +258,15 @@ const Goals = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'left',
         alignItems: 'center',
     },
     text: {
-        fontSize: 24,
+        fontSize: 10,
     },
+    Image:{
+        size:10,
+    }
 });
 
 export default Goals;
