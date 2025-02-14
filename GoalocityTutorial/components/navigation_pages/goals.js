@@ -16,7 +16,41 @@ const Goals = () => {
     const [newGoalDueDate, setNewGoalDueDate] = useState('');
     const [newGoalUrgent, setNewGoalUrgent] = useState(false);
 
-}
+    useEffect(() => {
+        const fetchGoals = async () => {
+            setLoading(true);
+
+            // Get the currently logged-in user
+            const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+            if (authError || !user) {
+                console.error("Error fetching user:", authError?.message);
+                setLoading(false);
+                return;
+            }
+
+            const userEmail = user.email;
+
+            // Fetch goals where "user" in Goals table matches the logged-in user's email
+            const { data: goalsData, error: goalsError } = await supabase
+                .from('Goals')
+                .select('*')
+                .eq('email', userEmail);
+
+            if (goalsError) {
+                console.error("Error fetching goals:", goalsError.message);
+                setGoals([]);  // Set empty array to prevent null
+            } else {
+                setGoals(goalsData || []);  // Ensure goalsData is always an array
+            }
+
+            setLoading(false);
+        };
+
+        fetchGoals();
+    }, []);
+
+};
 
 
 
