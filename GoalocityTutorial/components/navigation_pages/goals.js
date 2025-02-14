@@ -7,12 +7,18 @@ import { MaterialIcons } from '@expo/vector-icons';  // Import Material Icons
 //import { View, Text, StyleSheet } from 'react-native';
 
 const Goals = () => {
-    return (
-        <View style={styles.container}>
-            <Text style={styles.text}>Goals</Text>
-        </View>
-    );
-};
+    const [goals, setGoals] = useState([]); // Default to an empty array
+    const [loading, setLoading] = useState(true);
+    const [collapsedUrgent, setCollapsedUrgent] = useState(false);
+    const [collapsedOther, setCollapsedOther] = useState(false);
+    const [showModal, setShowModal] = useState(false);  // For showing the form modal
+    const [newGoalName, setNewGoalName] = useState('');
+    const [newGoalDueDate, setNewGoalDueDate] = useState('');
+    const [newGoalUrgent, setNewGoalUrgent] = useState(false);
+
+}
+
+
 
 const styles = StyleSheet.create({
     container: {
