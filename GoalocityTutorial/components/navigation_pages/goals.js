@@ -253,20 +253,92 @@ const Goals = () => {
 
 };
 
-
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'left',
+        paddingTop: 50,
+    },
+    header: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    sectionHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 20,
+        marginBottom: 10,
+        paddingLeft: 10,
+        paddingRight: 10,
+    },
+    sectionHeaderText: {
+        fontSize: 18,
+    },
+    goalsContainer: {
+        paddingLeft: 10,
+        paddingRight: 10,
+    },
+    goalBox: {
+        flexDirection: 'row',
+        marginVertical: 10,
         alignItems: 'center',
     },
-    text: {
-        fontSize: 10,
+    checkboxContainer: {
+        marginRight: 10,
     },
-    Image:{
-        size:10,
-    }
+    checkbox: {
+        width: 24,
+        height: 24,
+    },
+    goalTextContainer: {
+        flex: 1,
+    },
+    goalText: {
+        fontSize: 16,
+    },
+    goalDate: {
+        fontSize: 14,
+        color: 'gray',
+    },
+    addButton: {
+        position: 'absolute',
+        top: 700, //changed this! was bottom:100
+        right: 20,
+        backgroundColor: '#ff6347',
+        padding: 15,
+        borderRadius: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 10,
+        width: '80%',
+    },
+    modalTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 15,
+    },
+    input: {
+        height: 40,
+        borderColor: '#ccc',
+        borderWidth: 1,
+        marginBottom: 15,
+        paddingLeft: 10,
+    },
+    checkboxLabel: {
+        fontSize: 16,
+        marginRight: 10,
+    },
 });
 
 export default Goals;
